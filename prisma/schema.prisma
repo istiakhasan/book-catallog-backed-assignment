@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String            @id @default(uuid())
+  name            String
+  email           String            @unique
+  password        String
+  role            RoleEnum
+  contactNo       String
+  address         String
+  profileImg      String
+  ReviewAndRating ReviewAndRating[]
+  Order           Order[]
+
+  @@map("user")
+}
+
+model Category {
+  id    String @id @default(uuid())
+  title String
+  Book  Book[]
+
+  @@map("category")
+}
+
+model Book {
+  id              String            @id @default(uuid())
+  title           String
+  author          String
+  price           Float
+  genre           String
+  publicationDate String
+  category        Category          @relation(fields: [categoryId], references: [id])
+  categoryId      String
+  ReviewAndRating ReviewAndRating[]
+
+  @@map("book")
+}
+
+model ReviewAndRating {
+  id     String @id @default(uuid())
+  review String
+  rating Int
+  userId String
+  bookId String
+  user   User   @relation(fields: [userId], references: [id])
+  book   Book   @relation(fields: [bookId], references: [id])
+
+  @@map("review_and_rating")
+}
+
+model Order {
+  id           String   @id @default(uuid())
+  userId       String
+  orderedBooks Json
+  status       String   @default("pending")
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("order")
+}
+
+enum RoleEnum {
+  admin
+  customer
+}
