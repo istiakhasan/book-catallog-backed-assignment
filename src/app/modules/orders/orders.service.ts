@@ -22,7 +22,7 @@ const createOrders = async (
 const getAllOrders = async (
   user: JwtPayload | null
 ): Promise<Order[] | undefined> => {
-    console.log(user,"user");
+  console.log(user, 'user');
   let result;
   if (user && user.role === ENUM_USER_ROLE.ADMIN) {
     result = await prisma.order.findMany();
@@ -37,18 +37,28 @@ const getAllOrders = async (
   }
   return result;
 };
-const getSingleCategory = async (id: string): Promise<Category | null> => {
-  const result = await prisma.category.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      Book: true,
-    },
-  });
-  if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User is not exist!');
+const getSingleOrders = async (
+  id: string,
+  user: JwtPayload | null
+): Promise<Order | undefined | null> => {
+  let result;
+  if (user && user.role === ENUM_USER_ROLE.ADMIN) {
+    result = prisma.order.findUnique({
+      where: {
+        id: id,
+      },
+    });
   }
+
+  if (user && user.role === ENUM_USER_ROLE.CUSTOMER) {
+    result = prisma.order.findUnique({
+      where: {
+        id: id,
+        userId: user.userId,
+      },
+    });
+  }
+
   return result;
 };
 const updateCategory = async (
@@ -90,7 +100,7 @@ const deleteCategory = async (id: string): Promise<Category | null> => {
 };
 
 export const ordersService = {
-  getSingleCategory,
+  getSingleOrders,
   updateCategory,
   deleteCategory,
   createOrders,

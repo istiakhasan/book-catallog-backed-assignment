@@ -14,7 +14,6 @@ const createOrders = catchAsync(async (req: Request, res: Response) => {
   });
 });
 const getAllOrders = catchAsync(async (req: Request, res: Response) => {
-
   const result = await ordersService.getAllOrders(req.user);
   sendResponse(res, {
     success: true,
@@ -23,17 +22,18 @@ const getAllOrders = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-// const getSingleCategory = catchAsync(async (req: Request, res: Response) => {
-//   const result = await categoryService.getSingleCategory(
-//     req.params.id as string
-//   );
-//   sendResponse(res, {
-//     success: true,
-//     statusCode: 200,
-//     message: 'Category fetched successfully',
-//     data: result,
-//   });
-// });
+const getSingleOrders = catchAsync(async (req: Request, res: Response) => {
+  const result = await ordersService.getSingleOrders(
+    req.params.orderId as string,
+    req.user
+  );
+  sendResponse(res, {
+    success: true,
+    statusCode: 200,
+    message: 'Category fetched successfully',
+    data: result,
+  });
+});
 // const updateCategory = catchAsync(async (req: Request, res: Response) => {
 //   const result = await categoryService.updateCategory(
 //     req.params.id as string,
@@ -62,5 +62,6 @@ export const orderController = {
   //   updateCategory,
   //   deleteCategory,
   createOrders,
-  getAllOrders
+  getAllOrders,
+  getSingleOrders,
 };
