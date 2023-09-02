@@ -29,19 +29,8 @@ const getAllBooks = async (
   const { size, page, skip } = paginationHelpers.calculatePagination(options);
   //   search and filter
   const { search, category, minPrice, maxPrice } = filters;
-  //   console.log(filters, 'filter');
-  //   console.log(options, 'options');
   const andConditions = [];
 
-  //   if (Object.keys(filtersData).length > 0) {
-  //     andConditions.push({
-  //         AND: Object.keys(filtersData).map((key) => ({
-  //             [key]: {
-  //                 equals: (filtersData as any)[key]
-  //             }
-  //         }))
-  //     });
-  // }
   if (minPrice) {
     const regx = /^(0|[1-9]\d*)$/;
     const isNumberValid = regx.test(minPrice.toString());
@@ -104,14 +93,111 @@ const getAllBooks = async (
     skip,
     take: size,
     orderBy:
-    options.sortBy && options.sortOrder
+      options.sortBy && options.sortOrder
         ? { [options.sortBy]: options.sortOrder }
         : {
-            publicationDate: 'desc'
-        }
+            publicationDate: 'desc',
+          },
   });
-  console.log(options.sortBy,options.sortOrder,"sort order");
   const total = await prisma.book.count();
+  const totalPage = Math.ceil(total / size);
+  return {
+    meta: {
+      page,
+      size,
+      total,
+      totalPage,
+    },
+    data: result,
+  };
+};
+const getByCategoryId = async (
+  options: IPaginationOptions,
+  filters: IBooksFilters,
+  id: string
+): Promise<IGenericResponse<Book[]>> => {
+  // pagination
+  const { size, page, skip } = paginationHelpers.calculatePagination(options);
+  //   search and filter
+  const { search, category, minPrice, maxPrice } = filters;
+  const andConditions = [];
+  andConditions.push({
+    categoryId: {
+      equals: id,
+    },
+  });
+  if (minPrice) {
+    const regx = /^(0|[1-9]\d*)$/;
+    const isNumberValid = regx.test(minPrice.toString());
+
+    if (!isNumberValid) {
+      throw new ApiError(
+        httpStatus.BAD_REQUEST,
+        'Min price must be a valid number'
+      );
+    }
+    andConditions.push({
+      price: {
+        gte: Number(minPrice),
+      },
+    });
+  }
+  if (maxPrice) {
+    const regx = /^(0|[1-9]\d*)$/;
+    const isNumberValid = regx.test(maxPrice.toString());
+
+    if (!isNumberValid) {
+      throw new ApiError(
+        httpStatus.BAD_REQUEST,
+        'Max price must be a valid number'
+      );
+    }
+    andConditions.push({
+      price: {
+        lte: Number(maxPrice),
+      },
+    });
+  }
+  if (category) {
+    andConditions.push({
+      AND: {
+        categoryId: {
+          equals: category,
+        },
+      },
+    });
+  }
+  if (search) {
+    andConditions.push({
+      OR: ['title', 'author', 'genre'].map(field => ({
+        [field]: {
+          contains: search,
+          mode: 'insensitive',
+        },
+      })),
+    });
+  }
+  const whereConditions =
+    andConditions.length > 0 ? { AND: andConditions } : {};
+  const result = await prisma.book.findMany({
+    where: whereConditions,
+    include: {
+      category: true,
+    },
+    skip,
+    take: size,
+    orderBy:
+      options.sortBy && options.sortOrder
+        ? { [options.sortBy]: options.sortOrder }
+        : {
+            publicationDate: 'desc',
+          },
+  });
+  const total = await prisma.book.count({
+    where: {
+      categoryId: id,
+    },
+  });
   const totalPage = Math.ceil(total / size);
   return {
     meta: {
@@ -181,4 +267,5 @@ export const bookService = {
   deleteCategory,
   createBook,
   getAllBooks,
+  getByCategoryId,
 };
