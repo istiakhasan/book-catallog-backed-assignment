@@ -1,4 +1,4 @@
-import { Book, Category, PrismaClient } from '@prisma/client';
+import { Book, PrismaClient } from '@prisma/client';
 import httpStatus from 'http-status';
 import ApiError from '../../../errors/ApiError';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
@@ -223,19 +223,19 @@ const getSingleBook = async (id: string): Promise<Book | null> => {
   }
   return result;
 };
-const updateCategory = async (
+const updateSingleBook = async (
   id: string,
-  data: Partial<Category>
-): Promise<Category | null> => {
-  const isExist = await prisma.category.findUnique({
+  data: Partial<Book>
+): Promise<Book | null> => {
+  const isExist = await prisma.book.findUnique({
     where: {
       id,
     },
   });
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Not exist ');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Book Not exist ');
   }
-  const result = await prisma.category.update({
+  const result = await prisma.book.update({
     where: {
       id,
     },
@@ -243,17 +243,17 @@ const updateCategory = async (
   });
   return result;
 };
-const deleteCategory = async (id: string): Promise<Category | null> => {
-  const isExist = await prisma.category.findUnique({
+const deleteBook = async (id: string): Promise<Book | null> => {
+  const isExist = await prisma.book.findUnique({
     where: {
       id,
     },
   });
 
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Data not exist');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Book is  not exist');
   }
-  const result = await prisma.category.delete({
+  const result = await prisma.book.delete({
     where: {
       id,
     },
@@ -262,9 +262,9 @@ const deleteCategory = async (id: string): Promise<Category | null> => {
 };
 
 export const bookService = {
-    getSingleBook,
-  updateCategory,
-  deleteCategory,
+  getSingleBook,
+  updateSingleBook,
+  deleteBook,
   createBook,
   getAllBooks,
   getByCategoryId,

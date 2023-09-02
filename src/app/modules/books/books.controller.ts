@@ -46,24 +46,24 @@ const getSingleBook = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-const updateCategory = catchAsync(async (req: Request, res: Response) => {
-  const result = await bookService.updateCategory(
+const updateSingleBook = catchAsync(async (req: Request, res: Response) => {
+  const result = await bookService.updateSingleBook(
     req.params.id as string,
     req.body
   );
   sendResponse(res, {
     success: true,
     statusCode: 200,
-    message: 'Category updated successfully',
+    message: 'Book updated successfully',
     data: result,
   });
 });
-const deleteCategory = catchAsync(async (req: Request, res: Response) => {
-  const result = await bookService.deleteCategory(req.params.id as string);
+const deleteBook = catchAsync(async (req: Request, res: Response) => {
+  const result = await bookService.deleteBook(req.params.id as string);
   sendResponse(res, {
     success: true,
     statusCode: 200,
-    message: 'Category deleted successfully',
+    message: 'Book is deleted successfully',
     data: result,
   });
 });
@@ -71,8 +71,8 @@ const deleteCategory = catchAsync(async (req: Request, res: Response) => {
 export const booksController = {
   getAllBooks,
   getSingleBook,
-  updateCategory,
-  deleteCategory,
+  updateSingleBook,
+  deleteBook,
   createBook,
   getByCategoryId
 };
