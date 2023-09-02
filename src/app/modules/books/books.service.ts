@@ -83,6 +83,7 @@ const getAllBooks = async (
       })),
     });
   }
+ 
   const whereConditions =
     andConditions.length > 0 ? { AND: andConditions } : {};
   const result = await prisma.book.findMany({
