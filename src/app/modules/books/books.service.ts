@@ -209,17 +209,17 @@ const getByCategoryId = async (
     data: result,
   };
 };
-const getSingleCategory = async (id: string): Promise<Category | null> => {
-  const result = await prisma.category.findUnique({
+const getSingleBook = async (id: string): Promise<Book | null> => {
+  const result = await prisma.book.findUnique({
     where: {
       id,
     },
     include: {
-      Book: true,
+      category: true,
     },
   });
   if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User is not exist!');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Book is not exist!');
   }
   return result;
 };
@@ -262,7 +262,7 @@ const deleteCategory = async (id: string): Promise<Category | null> => {
 };
 
 export const bookService = {
-  getSingleCategory,
+    getSingleBook,
   updateCategory,
   deleteCategory,
   createBook,
