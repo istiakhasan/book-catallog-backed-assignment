@@ -2,8 +2,8 @@
 
 ### Application Routes:
 ### Auth
-- https://book-cattalog-web-backend.vercel.app/api/v1/auth/signin(post)
 - https://book-cattalog-web-backend.vercel.app/api/v1/auth/signup (POST)
+- https://book-cattalog-web-backend.vercel.app/api/v1/auth/signin (post)
 
 #### User
 
