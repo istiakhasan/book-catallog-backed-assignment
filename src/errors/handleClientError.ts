@@ -3,29 +3,30 @@ import { IGenericErrorMessage } from '../interfaces/error';
 
 const handleClientError = (error: Prisma.PrismaClientKnownRequestError) => {
   let errors: IGenericErrorMessage[] = [];
-  let message = '';
-
+  let message = error.message
   const statusCode = 400;
 
   if (error.code === 'P2025') {
-    message = (error.meta?.cause as string) || 'Record not fould';
+    message = (error.meta?.cause as string) || "Record not found!"
     errors = [
       {
-        path: '',
-        message,
-      },
-    ];
-  } else if (error.code === 'P2003') {
+        path: "",
+        message
+      }
+    ]
+  }
+  else if (error.code === 'P2003') {
     if (error.message.includes('delete()` invocation:')) {
-      message = 'Delete failed';
+      message = "Delete failed"
       errors = [
         {
-          path: '',
-          message,
-        },
-      ];
+          path: "",
+          message
+        }
+      ]
     }
   }
+
   return {
     statusCode,
     message,
@@ -34,3 +35,4 @@ const handleClientError = (error: Prisma.PrismaClientKnownRequestError) => {
 };
 
 export default handleClientError;
+
