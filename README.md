@@ -4,7 +4,7 @@
 
 #### User
 
--https://book-catallog-web-server.vercel.app/api/v1/auth/signup (POST)
+- https://book-catallog-web-server.vercel.app/api/v1/auth/signup (POST)
 - https://book-catallog-web-server.vercel.app/api/v1/users (GET)
 - https://book-catallog-web-server.vercel.app/api/v1/users/6177a5b87d32123f08d2f5d4 (Single GET) Include an id that is saved in your database
 - https://book-catallog-web-server.vercel.app/api/v1/users/6177a5b87d32123f08d2f5d4 (PATCH)
