@@ -12,6 +12,15 @@ export type ILoginUser = {
 const prisma = new PrismaClient();
 
 const signUp = async (data: User): Promise<User> => {
+  const isUserExist = await prisma.user.findUnique({
+    where: {
+      email: data.email,
+    },
+  });
+
+  if (isUserExist) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'User already exist');
+  }
   const result = await prisma.user.create({
     data,
   });
@@ -30,7 +39,7 @@ const login = async (data: ILoginUser) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist');
   }
 
-  const { id:userId, password: savePassword, role } = isUserExist;
+  const { id: userId, password: savePassword, role } = isUserExist;
   if (password !== savePassword) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Password is incorrect');
   }
