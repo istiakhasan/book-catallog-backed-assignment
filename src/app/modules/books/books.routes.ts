@@ -1,11 +1,13 @@
 import express from 'express';
 import { ENUM_USER_ROLE } from '../../../enums/user';
 import auth from '../../middlewares/auth';
+import validateRequest from '../../middlewares/validateRequest';
 import { booksController } from './books.controller';
+import { bookZodValidation } from './books.validation';
 
 const router = express.Router();
 
-router.post('/create-book',auth(ENUM_USER_ROLE.ADMIN), booksController.createBook);
+router.post('/create-book',validateRequest(bookZodValidation),auth(ENUM_USER_ROLE.ADMIN), booksController.createBook);
 router.get('/', booksController.getAllBooks);
 router.get('/:categoryId/category', booksController.getByCategoryId);
 router.get('/:id', booksController.getSingleBook);

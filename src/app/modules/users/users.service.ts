@@ -23,6 +23,14 @@ const updateSingleUsers = async (
   id: string,
   data: Partial<User>
 ): Promise<User | null> => {
+  const isExist=await prisma.user.findUnique({
+    where:{
+      id
+    }
+  })
+  if(!isExist){
+    throw new ApiError(httpStatus.NOT_FOUND,'User is not exist')
+  }
   const result = await prisma.user.update({
     where: {
       id,
@@ -32,6 +40,14 @@ const updateSingleUsers = async (
   return result;
 };
 const deleteSingleUser = async (id: string): Promise<User | null> => {
+  const isExist=await prisma.user.findUnique({
+    where:{
+      id
+    }
+  })
+  if(!isExist){
+    throw new ApiError(httpStatus.NOT_FOUND,'User is not exist')
+  }
   const result = await prisma.user.delete({
     where: {
       id,

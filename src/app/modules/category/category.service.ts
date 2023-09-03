@@ -28,7 +28,7 @@ const getSingleCategory = async (id: string): Promise<Category | null> => {
     },
   });
   if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User is not exist!');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Category is not exist!');
   }
   return result;
 };

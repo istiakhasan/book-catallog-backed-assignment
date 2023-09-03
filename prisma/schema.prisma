@@ -16,30 +16,30 @@ model User {
   contactNo       String
   address         String
   profileImg      String
-  ReviewAndRating ReviewAndRating[]
-  Order           Order[]
+  reviewAndRating ReviewAndRating[]
+  order           Order[]
 
   @@map("user")
 }
 
 model Category {
-  id    String @id @default(uuid())
+  id    String  @id @default(uuid())
   title String
-  Book  Book[]
+  books Book[]
 
   @@map("category")
 }
 
 model Book {
-  id              String            @id @default(uuid())
-  title           String
-  author          String
-  price           Float
-  genre           String
-  publicationDate String
-  category        Category          @relation(fields: [categoryId], references: [id])
-  categoryId      String
-  ReviewAndRating ReviewAndRating[]
+  id               String            @id @default(uuid())
+  title            String
+  author           String
+  price            Float
+  genre            String
+  publicationDate  String
+  category         Category          @relation(fields: [categoryId], references: [id])
+  categoryId       String
+  reviewAndRatings ReviewAndRating[]
 
   @@map("book")
 }
