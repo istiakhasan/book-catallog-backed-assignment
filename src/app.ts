@@ -14,9 +14,15 @@ app.use(cookieParser());
 //parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.get('', (req, res) => {
+  res.send(
+    {
+      server: 'Welcome to Book catallog server',
+    },
+  );
+});
 
 app.use('/api/v1', routes);
-
 
 //global error handler
 app.use(globalErrorHandler);
