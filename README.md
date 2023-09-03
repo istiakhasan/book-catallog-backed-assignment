@@ -1,10 +1,12 @@
 ### Live Link: https://book-cattalog-web-backend.vercel.app/
 
 ### Application Routes:
+### Auth
+- https://book-cattalog-web-backend.vercel.app/api/v1/auth/signin(post)
+- https://book-cattalog-web-backend.vercel.app/api/v1/auth/signup (POST)
 
 #### User
 
-- https://book-cattalog-web-backend.vercel.app/api/v1/auth/signup (POST)
 - https://book-cattalog-web-backend.vercel.app/api/v1/users (GET)
 - https://book-cattalog-web-backend.vercel.app/api/v1/users/faf383f0-cf2d-429e-b74e-41150fa70a3a (Single GET)
 - https://book-cattalog-web-backend.vercel.app/api/v1/users/faf383f0-cf2d-429e-b74e-41150fa70a3a (PATCH)
